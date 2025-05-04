@@ -2,9 +2,11 @@
 
 const express = require("express");
 const userRoute = require("./userRoute.js");
+const cropsRoute = require("./cropsRoute.js");
 
 const router = express.Router();
 
 router.use(userRoute); // user 경로
+router.use(cropsRoute); // crops 경로로
 
 module.exports = router;
