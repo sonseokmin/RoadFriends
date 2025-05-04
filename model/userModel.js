@@ -8,13 +8,13 @@ const dbConnect = require("../database/index.js");
 */
 
 exports.userCheck = async (req) => {
-    const reqestData = [req.email, req.socialType];
+    const reqestData = [req.email, req.socialType, req.socialIdx];
 
-    // 같은 인증 종류과 이메일이 존재하면 인덱스 리턴
+    // 같은 인증 종류, 이메일, 소셜 고유 인덱스가가 존재하면 인덱스 리턴
     const sql = `
     SELECT idx
     FROM users
-    WHERE email = ? AND socialType = ?
+    WHERE email = ? AND socialType = ? AND socialIdx = ?
     `
 
     const [result] = await dbConnect.query(sql, reqestData);
@@ -28,13 +28,13 @@ exports.userCheck = async (req) => {
 }
 
 exports.userSignup = async (req) => {
-    const reqestData = [req.email, req.name, req.socialType];
+    const reqestData = [req.email, req.name, req.socialType, req.socialIdx];
 
     // 이메일, 이름, 인증 종류 기준으로 DB에 저장
     const sql = `
     INSERT INTO users
-    (email, name, socialType) VALUES
-    (?, ?, ?)
+    (email, name, socialType, socialIdx) VALUES
+    (?, ?, ?, ?)
     `
 
     const [result] = await dbConnect.query(sql, reqestData);

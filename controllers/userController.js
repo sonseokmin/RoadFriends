@@ -11,8 +11,9 @@ const userModel = require("../model/userModel")
 exports.userCheck = async (req, res) => {
     const email = req.query.email;
     const socialType = req.query.socialType;
+    const socialIdx = req.query.socialIdx;
 
-    console.log(email, !email)
+    console.log(email, socialType, socialIdx)
 
     // 이메일 누락 체크
     if(!email){
@@ -32,9 +33,19 @@ exports.userCheck = async (req, res) => {
         })
     }
 
+    // 소셜 고유 인덱스 누락 체크
+    if(!socialIdx){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid socialIdx",
+            data : null,
+        })
+    }
+
     const reqestData = {
         email : email,
-        socialType : socialType
+        socialType : socialType,
+        socialIdx : socialIdx
     }
 
     try{
@@ -68,9 +79,10 @@ exports.userCheck = async (req, res) => {
 }
 
 exports.userSignup = async (req, res) => {
-    const {email, name, socialType} = req.body;
+    const {email, name, socialType, socialIdx} = req.body;
 
-    console.log(email, name, socialType)
+    console.log(email, name, socialType, socialIdx)
+
 
     // 이메일 누락 체크
     if(!email){
@@ -99,11 +111,21 @@ exports.userSignup = async (req, res) => {
         })
     }
 
+    // 소셜 고유 인덱스 누락 체크
+    if(!socialIdx){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid socialIdx",
+            data : null,
+        })
+    }
+
     // DB 요청 데이터
     const requestData = {
         email : email,
         name : name,
         socialType : socialType,
+        socialIdx : socialIdx
     }
 
     try{

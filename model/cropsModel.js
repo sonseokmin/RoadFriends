@@ -9,7 +9,8 @@ const dbConnect = require("../database/index.js");
 exports.cropsCheck = async (req, res) => {
 
     const sql = `
-    SELECT * FROM crops;
+    SELECT * FROM crops
+    ORDER BY idx ASC;
     `
 
     const [result] = await dbConnect.query(sql);
