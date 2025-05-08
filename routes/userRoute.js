@@ -6,6 +6,6 @@ const userController = require("../controllers/userController.js");
 const router = express.Router();
 
 router.get("/users/user", userController.userCheck) // 유저 확인
-router.post("/users/user", userController.userSignup) // 유저 추가
+router.post("/users/user", userController.userCreate) // 유저 생성
 
 module.exports = router;
