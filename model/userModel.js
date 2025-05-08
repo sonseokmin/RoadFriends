@@ -27,7 +27,7 @@ exports.userCheck = async (req) => {
 
 }
 
-exports.userSignup = async (req) => {
+exports.userCreate = async (req) => {
     const reqestData = [req.email, req.name, req.socialType, req.socialIdx];
 
     // 이메일, 이름, 인증 종류 기준으로 DB에 저장

@@ -78,7 +78,7 @@ exports.userCheck = async (req, res) => {
     }
 }
 
-exports.userSignup = async (req, res) => {
+exports.userCreate = async (req, res) => {
     const {email, name, socialType, socialIdx} = req.body;
 
     console.log(email, name, socialType, socialIdx)
