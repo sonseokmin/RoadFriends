@@ -11,7 +11,9 @@ const cropsModel = require("../model/cropsModel.js")
 exports.cropsCheck = async (req, res) => {
 
  try{
-        const response = await cropsModel.cropsCheck()
+        const response = await cropsModel.cropsCheck();
+
+        console.log(response)
 
         return res.status(200).json({
             status  : 200,

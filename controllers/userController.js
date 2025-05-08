@@ -132,8 +132,6 @@ exports.userSignup = async (req, res) => {
 
         const response = await userModel.userSignup(requestData)
 
-        console.log(response)
-
         if(response.length === 0){
             return res.status(200).json({
                 status  : 200,
@@ -151,9 +149,18 @@ exports.userSignup = async (req, res) => {
     catch(err){
         console.log(err)
 
+        // socialType과 socialIdx가 충돌이 발생할 경우
+        if(err.sqlState === "23000"){
+            return res.status(409).json({
+                status  : 409,
+                message : "Conflict error",
+            })
+        }
+
         return res.status(500).json({
             status  : 500,
             message : "server error",
         })
     }
+
 }
