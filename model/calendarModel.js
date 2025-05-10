@@ -8,13 +8,14 @@ exports.calendarCheck = async (req) => {
     const sql = `
     SELECT 
         crops.name, 
-        calendar.workDate, 
+        DATE_FORMAT(CONVERT_TZ(calendar.workDate, '+00:00', '+09:00'), '%Y-%m-%d') AS workDate,  
         wc.taskName
     FROM calendar
     JOIN crops ON calendar.cropIdx = crops.idx
     JOIN workStandardCodes wc ON calendar.workCode = wc.workCode
     JOIN users u ON calendar.userIdx = u.idx
     WHERE u.idx = ? AND u.socialIdx = ?;
+
 
     `
 
