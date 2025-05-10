@@ -130,7 +130,7 @@ exports.userCreate = async (req, res) => {
 
     try{
 
-        const response = await userModel.userSignup(requestData)
+        const response = await userModel.userCreate(requestData)
 
         if(response.length === 0){
             return res.status(200).json({
@@ -143,7 +143,9 @@ exports.userCreate = async (req, res) => {
         return res.status(201).json({
             status  : 201,
             message : "success made user",
-            data : response,
+            data : {
+                idx : response
+            },
         })    
     }
     catch(err){
