@@ -156,7 +156,7 @@ exports.calendarCreate = async (req, res) => {
         let requestData = new URLSearchParams(params).toString();
       
         // AI 서버로 요청
-        const responseAI = await fetch(`http://61.245.248.218:${process.env.AI_PORT}/farm/schedule?${requestData}`, {
+        const responseAI = await fetch(`http://fastapi-ai:${process.env.AI_PORT}/farm/schedule?${requestData}`, {
            method: 'GET',
            credentials: 'include',
          })
