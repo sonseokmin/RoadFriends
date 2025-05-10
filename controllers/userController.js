@@ -49,7 +49,7 @@ exports.userCheck = async (req, res) => {
     }
 
     try{
-        const response = await userModel.userCheck(reqestData)
+        const response = await userModel.userCreate(reqestData)
 
         console.log(response)
 
@@ -143,7 +143,9 @@ exports.userCreate = async (req, res) => {
         return res.status(201).json({
             status  : 201,
             message : "success made user",
-            data : response,
+            data : {
+                userIdx : response
+            },
         })    
     }
     catch(err){

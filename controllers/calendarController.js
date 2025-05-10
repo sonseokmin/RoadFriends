@@ -170,7 +170,7 @@ exports.calendarCreate = async (req, res) => {
          if(schdule.length === 0 ){
             return res.status(200).json({
                 status  : 200,
-                message : "Cant made calendar",
+                message : "Failed to create the calendar on the AI server",
                 data : null,
             })
          }
@@ -189,19 +189,21 @@ exports.calendarCreate = async (req, res) => {
 
         response = await calendarModel.calenderCreate(requestData);
 
-          // 없는 유저일 경우
+        // DB에 저장되지 않았을 경우 
         if(!response){
             return res.status(200).json({
                 status  : 200,
-                message : "Cant made calendar",
+                message : "Cant save Calendar",
                 data : null,
             })
         }
 
         return res.status(200).json({
-            status  : 200,
+            status  : 201,
             message : "Success made calendar",
-            data : response,
+            data : {
+                userIdx : response
+            },
         })
          
     }
