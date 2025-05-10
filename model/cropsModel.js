@@ -3,7 +3,8 @@
 const dbConnect = require("../database/index.js");
 
 /**
- * 작물 확인
+ * 작물 목록 확인
+ * 작물 확인인
  */
 
 exports.cropsCheck = async (req, res) => {
@@ -14,6 +15,27 @@ exports.cropsCheck = async (req, res) => {
     `
 
     const [result] = await dbConnect.query(sql);
+
+        if(!result){
+            return null
+        }
+    
+        return result;
+        
+}
+
+exports.cropCheck = async (req, res) => {
+    const requestData = [req];
+
+    console.log(requestData)
+    
+    const sql = `
+    SELECT name 
+    FROM crops
+    WHERE idx = ?;
+    `
+
+    const [result] = await dbConnect.query(sql, requestData);
 
         if(!result){
             return null

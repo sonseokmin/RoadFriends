@@ -1,6 +1,7 @@
 /* 캘린더 관련 API 응답 반환 파일 */
 
 const calendarModel = require("../model/calendarModel.js")
+const cropsModel =  require("../model/cropsModel.js")
 
 /**
  * 캘린더 확인
@@ -61,4 +62,156 @@ exports.calendarCheck = async (req, res) => {
     }
 
 
+}
+
+exports.calendarCreate = async (req, res) => {
+    const {userIdx, socialIdx, cropIdx, startAt, location, locationX, locationY } = req.body;
+
+    console.log(
+        `userIdx : ${userIdx}, socialIdx : ${socialIdx}, cropIdx : ${cropIdx}, startAt : ${startAt}, location : ${location}, locationX : ${locationX}, locationY : ${locationY}`
+    )
+
+     // 유저 인덱스 누락 체크
+     if(!userIdx){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid userIdx",
+            data : null,
+        })
+    }
+
+    // 소셜 인덱스 누락 체크
+    if(!socialIdx){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid socialIdx",
+            data : null,
+        })
+    }
+
+    // 작물 인덱스 누락 체크
+    if(!cropIdx){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid cropIdx",
+            data : null,
+        })
+    }
+
+    // 시작 일자 누락 체크
+    if(!startAt){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid startAt",
+            data : null,
+        })
+    }
+
+    // 자연어 지역 누락 체크
+    if(!location){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid location",
+            data : null,
+        })
+    }
+
+    // 지역 X 좌표 누락 체크
+    if(!locationX){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid locationX",
+            data : null,
+        })
+    }
+
+    // 지역 Y 좌표 누락 체크
+    if(!locationY){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid locationY",
+            data : null,
+        })
+    }
+
+   
+    try{
+
+        // 작물 인덱스를 이용해 작물 테이블에서 이름 반환
+        const crop = await cropsModel.cropCheck(cropIdx)
+
+        // 년-월-일 형식의 날짜 데이터를 유닉스 타임으로 변환
+        unixTime = new Date(startAt)
+
+        // 요청할 파라미터
+        const params = {
+            crop: crop.map(item => item.name), // 작물명
+            startAt: unixTime.getTime(), // 시작 일자
+            location: location, // 자연어 주소
+            locationX: locationX, // x좌표
+            locationY: locationY, // y좌표
+          };
+
+        // params 객체를 요청할 수 있는 파라미터 형태로 변환
+        let requestData = new URLSearchParams(params).toString();
+      
+        // AI 서버로 요청
+        const responseAI = await fetch(`http://61.245.248.218:${process.env.AI_PORT}/farm/schedule?${requestData}`, {
+           method: 'GET',
+           credentials: 'include',
+         })
+
+        
+        let response = await responseAI.json()
+
+        const schdule = response.schdule;
+
+        // 재배력을 생성하지 못했을 경우
+         if(schdule.length === 0 ){
+            return res.status(200).json({
+                status  : 200,
+                message : "Cant made calendar",
+                data : null,
+            })
+         }
+
+        requestData = {
+            userIdx : userIdx,
+            cropIdx : cropIdx,
+            schedule : schdule,
+            location : location,
+            locationX : locationX,
+            locationY : locationY
+         }
+
+        console.log(requestData)
+
+
+        response = await calendarModel.calenderCreate(requestData);
+
+          // 없는 유저일 경우
+        if(!response){
+            return res.status(200).json({
+                status  : 200,
+                message : "Cant made calendar",
+                data : null,
+            })
+        }
+
+        return res.status(200).json({
+            status  : 200,
+            message : "Success made calendar",
+            data : response,
+        })
+         
+    }
+    catch(err){
+        console.log(err)
+
+        return res.status(500).json({
+            status  : 500,
+            message : "server error",
+        })
+    }
+    
 }

@@ -6,6 +6,6 @@ const calendarController = require("../controllers/calendarController.js");
 const router = express.Router();
 
 router.get("/calendars", calendarController.calendarCheck) // 캘린더 확인
-// router.post("/calenders", calenderController.calenderCreate) // 캘린더 생성
+router.post("/calendars", calendarController.calendarCreate) // 캘린더 생성
 
 module.exports = router;

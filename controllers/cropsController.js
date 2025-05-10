@@ -3,11 +3,11 @@
 const cropsModel = require("../model/cropsModel.js")
 
 /**
- * 작물 확인
+ * 작물 목록 확인
  */
 
 
-// 작물 확인
+// 작물 목록 확인
 exports.cropsCheck = async (req, res) => {
 
  try{
@@ -32,3 +32,4 @@ exports.cropsCheck = async (req, res) => {
     }
 
 }
+
