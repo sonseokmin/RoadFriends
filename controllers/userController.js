@@ -144,7 +144,7 @@ exports.userCreate = async (req, res) => {
             status  : 201,
             message : "success made user",
             data : {
-                idx : response
+                userIdx : response
             },
         })    
     }
