@@ -12,7 +12,7 @@ exports.calendarCheck = async (req) => {
         ct.taskName
     FROM calendar
     JOIN crops ON calendar.cropIdx = crops.idx
-    JOIN croptasks ct ON calendar.workCode = ct.idx
+    JOIN cropTasks ct ON calendar.workCode = ct.idx
     JOIN users u ON calendar.userIdx = u.idx
     WHERE u.idx = ? AND u.socialIdx = ?;
     `
