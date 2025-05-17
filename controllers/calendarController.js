@@ -137,16 +137,16 @@ exports.calendarCreate = async (req, res) => {
    
     try{
 
-        // 작물 인덱스를 이용해 작물 테이블에서 이름 반환
-        const crop = await cropsModel.cropCheck(cropIdx)
+
 
         // 년-월-일 형식의 날짜 데이터를 유닉스 타임으로 변환
         unixTime = new Date(startAt)
 
         // 요청할 파라미터
         const params = {
-            crop: crop.map(item => item.name), // 작물명
+            cropIdx, cropIdx,
             startAt: unixTime.getTime(), // 시작 일자
+            n_samples : 1000,
             location: location, // 자연어 주소
             locationX: locationX, // x좌표
             locationY: locationY, // y좌표
@@ -164,10 +164,13 @@ exports.calendarCreate = async (req, res) => {
         
         let response = await responseAI.json()
 
-        const schdule = response.schdule;
+        console.log(response)
+        
+        const schedules = response.schedules;
+
 
         // 재배력을 생성하지 못했을 경우
-         if(schdule.length === 0 ){
+         if(schedules.length === 0 ){
             return res.status(200).json({
                 status  : 200,
                 message : "Failed to create the calendar on the AI server",
@@ -178,7 +181,7 @@ exports.calendarCreate = async (req, res) => {
         requestData = {
             userIdx : userIdx,
             cropIdx : cropIdx,
-            schedule : schdule,
+            schedule : schedules,
             location : location,
             locationX : locationX,
             locationY : locationY

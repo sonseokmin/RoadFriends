@@ -49,7 +49,7 @@ exports.userCheck = async (req, res) => {
     }
 
     try{
-        const response = await userModel.userCreate(reqestData)
+        const response = await userModel.userCheck(reqestData)
 
         console.log(response)
 
@@ -130,7 +130,7 @@ exports.userCreate = async (req, res) => {
 
     try{
 
-        const response = await userModel.userSignup(requestData)
+        const response = await userModel.userCreate(requestData)
 
         if(response.length === 0){
             return res.status(200).json({

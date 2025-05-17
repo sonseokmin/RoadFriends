@@ -49,7 +49,7 @@ exports.calenderCreate = async (req) => {
         requestData[5]  // locationY
     );
     }
-
+    console.log(values)
     const sql = `
     INSERT INTO calendar (userIdx, cropIdx, workCode, workDate, location, locationX, locationY)
     VALUES ${placeholders.join(',')};
