@@ -137,8 +137,6 @@ exports.calendarCreate = async (req, res) => {
    
     try{
 
-
-
         // 년-월-일 형식의 날짜 데이터를 유닉스 타임으로 변환
         unixTime = new Date(startAt)
 
@@ -146,7 +144,6 @@ exports.calendarCreate = async (req, res) => {
         const params = {
             cropIdx, cropIdx,
             startAt: unixTime.getTime(), // 시작 일자
-            n_samples : 1000,
             location: location, // 자연어 주소
             locationX: locationX, // x좌표
             locationY: locationY, // y좌표
@@ -196,7 +193,6 @@ exports.calendarCreate = async (req, res) => {
         if(!response){
             return res.status(200).json({
                 status  : 200,
-                message : "Cant save Calendar",
                 message : "Cant save calendar",
                 data : null,
             })
