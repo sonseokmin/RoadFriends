@@ -26,8 +26,6 @@ exports.cropsCheck = async (req, res) => {
 
 exports.cropCheck = async (req, res) => {
     const requestData = [req];
-
-    console.log(requestData)
     
     const sql = `
     SELECT name 

@@ -12,6 +12,8 @@ exports.calendarCheck = async (req, res) => {
     const userIdx = req.query.userIdx
     const socialIdx = req.query.socialIdx
 
+    console.log(`requestData = { idx : ${userIdx},  socialIdx : ${socialIdx} }`)
+
     // 유저 인덱스 누락 체크
     if(!userIdx){
         return res.status(400).json({
@@ -38,8 +40,7 @@ exports.calendarCheck = async (req, res) => {
     try{
         const response = await calendarModel.calendarCheck(requestData);
 
-        console.log(response)
-
+        console.log(` responseData = { ${response} }`)
 
           // 생성된 재배력이 없을 경우
           if(response.length === 0){
@@ -68,7 +69,7 @@ exports.calendarCreate = async (req, res) => {
     const {userIdx, socialIdx, cropIdx, startAt, location, locationX, locationY } = req.body;
 
     console.log(
-        `userIdx : ${userIdx}, socialIdx : ${socialIdx}, cropIdx : ${cropIdx}, startAt : ${startAt}, location : ${location}, locationX : ${locationX}, locationY : ${locationY}`
+        ` requestData = { userIdx : ${userIdx}, socialIdx : ${socialIdx}, cropIdx : ${cropIdx}, startAt : ${startAt}, location : ${location}, locationX : ${locationX}, locationY : ${locationY} }`
     )
 
      // 유저 인덱스 누락 체크
@@ -137,8 +138,6 @@ exports.calendarCreate = async (req, res) => {
    
     try{
 
-
-
         // 년-월-일 형식의 날짜 데이터를 유닉스 타임으로 변환
         unixTime = new Date(startAt)
 
@@ -164,7 +163,7 @@ exports.calendarCreate = async (req, res) => {
         
         let response = await responseAI.json()
 
-        console.log(response)
+        console.log(`AI_responseData = { ${response} }`)
         
         const schedules = response.schedules;
 
@@ -187,10 +186,10 @@ exports.calendarCreate = async (req, res) => {
             locationY : locationY
          }
 
-        console.log(requestData)
-
-
         response = await calendarModel.calenderCreate(requestData);
+
+        console.log(` responseData = { ${response} }`)
+
 
         // DB에 저장되지 않았을 경우 
         if(!response){

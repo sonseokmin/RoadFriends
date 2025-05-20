@@ -13,7 +13,7 @@ exports.userCheck = async (req, res) => {
     const socialType = req.query.socialType;
     const socialIdx = req.query.socialIdx;
 
-    console.log(email, socialType, socialIdx)
+    console.log(`requestData = { email : ${email}, socialType : ${socialType}, socialIdx : ${socialIdx}}`)
 
     // 이메일 누락 체크
     if(!email){
@@ -51,7 +51,7 @@ exports.userCheck = async (req, res) => {
     try{
         const response = await userModel.userCheck(reqestData)
 
-        console.log(response)
+        console.log(` responseData = { ${response} }`)
 
         // 없는 유저일 경우
         if(response.length === 0){
@@ -81,7 +81,7 @@ exports.userCheck = async (req, res) => {
 exports.userCreate = async (req, res) => {
     const {email, name, socialType, socialIdx} = req.body;
 
-    console.log(email, name, socialType, socialIdx)
+    console.log(`requestData = { email : ${email}, name : ${name}, socialType : ${socialType}, socialIdx : ${socialIdx}}`)
 
 
     // 이메일 누락 체크
@@ -131,6 +131,8 @@ exports.userCreate = async (req, res) => {
     try{
 
         const response = await userModel.userCreate(requestData)
+
+        console.log(` responseData = { ${response} }`)
 
         if(response.length === 0){
             return res.status(200).json({

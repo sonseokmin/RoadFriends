@@ -30,8 +30,7 @@ exports.calendarCheck = async (req) => {
 exports.calenderCreate = async (req) => {
     const requestData = [req.userIdx, req.cropIdx, req.schedule, req.location, req.locationX, req.locationY];
 
-    console.log(requestData)
-        // schedule 배열 추출
+    // schedule 배열 추출
     const scheduleArray = requestData[2]; // schedule = [{ workCode, workDate }, {...}, ...]
 
     const values = [];
@@ -49,7 +48,7 @@ exports.calenderCreate = async (req) => {
         requestData[5]  // locationY
     );
     }
-    console.log(values)
+
     const sql = `
     INSERT INTO calendar (userIdx, cropIdx, workCode, workDate, location, locationX, locationY)
     VALUES ${placeholders.join(',')};
