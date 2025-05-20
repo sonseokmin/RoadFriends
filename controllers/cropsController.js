@@ -13,7 +13,7 @@ exports.cropsCheck = async (req, res) => {
  try{
         const response = await cropsModel.cropsCheck();
 
-        console.log(response)
+        console.log(` responseData = { ${response} }`)
 
         return res.status(200).json({
             status  : 200,
