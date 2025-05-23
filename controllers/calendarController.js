@@ -1,7 +1,6 @@
 /* 캘린더 관련 API 응답 반환 파일 */
 
 const calendarModel = require("../model/calendarModel.js")
-const cropsModel =  require("../model/cropsModel.js")
 
 /**
  * 캘린더 확인
