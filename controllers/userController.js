@@ -1,10 +1,12 @@
 /* 유저 관련 API 응답 반환 파일 */
 
 const userModel = require("../model/userModel")
+const socialService = require("../services/socialService")
 
 /** 
  * 유저 확인
  * 회원가입
+ * 토큰 생성성
 */
 
 // 유저 확인
@@ -12,8 +14,9 @@ exports.userCheck = async (req, res) => {
     const email = req.query.email;
     const socialType = req.query.socialType;
     const socialIdx = req.query.socialIdx;
+    const accessToken = req.query.accessToken;
 
-    console.log(`requestData = { email : ${email}, socialType : ${socialType}, socialIdx : ${socialIdx}}`)
+    console.log(`requestData = { email : ${email}, socialType : ${socialType}, socialIdx : ${socialIdx}, accessToken : ${accessToken}}`)
 
     // 이메일 누락 체크
     if(!email){
@@ -42,6 +45,16 @@ exports.userCheck = async (req, res) => {
         })
     }
 
+    // 유저 accessToken 누락 체크
+    if(!accessToken){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid accessToken",
+            data : null,
+        })
+    }
+
+
     const reqestData = {
         email : email,
         socialType : socialType,
@@ -49,6 +62,15 @@ exports.userCheck = async (req, res) => {
     }
 
     try{
+        // 소셜 고유 인덱스와 accessToken을 가지고 소셜에 인증 확인
+        if(!await socialService.socialCheck(socialType, socialIdx, accessToken)){
+                return res.status(401).json({
+                    status  : 401,
+                    message : "Unauthorized",
+                    data : null,
+                })
+        }
+
         const response = await userModel.userCheck(reqestData)
 
         console.log(` responseData = { ${response} }`)
@@ -62,6 +84,7 @@ exports.userCheck = async (req, res) => {
             })
         }
 
+        // 있는 유저인 경우
         return res.status(200).json({
             status  : 200,
             message : "exist user",
@@ -78,10 +101,11 @@ exports.userCheck = async (req, res) => {
     }
 }
 
+// 회원가입
 exports.userCreate = async (req, res) => {
-    const {email, name, socialType, socialIdx} = req.body;
+    const {email, name, socialType, socialIdx, accessToken} = req.body;
 
-    console.log(`requestData = { email : ${email}, name : ${name}, socialType : ${socialType}, socialIdx : ${socialIdx}}`)
+    console.log(`requestData = { email : ${email}, name : ${name}, socialType : ${socialType}, socialIdx : ${socialIdx}, accessToken : ${accessToken}}`)
 
 
     // 이메일 누락 체크
@@ -120,6 +144,15 @@ exports.userCreate = async (req, res) => {
         })
     }
 
+    // 유저 accessToken 누락 체크
+    if(!accessToken){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid accessToken",
+            data : null,
+        })
+    }
+
     // DB 요청 데이터
     const requestData = {
         email : email,
@@ -129,6 +162,15 @@ exports.userCreate = async (req, res) => {
     }
 
     try{
+
+         // 소셜 고유 인덱스와 accessToken을 가지고 소셜에 인증 확인
+        if(!await socialService.socialCheck(socialType, socialIdx, accessToken)){
+                return res.status(401).json({
+                    status  : 401,
+                    message : "Unauthorized",
+                    data : null,
+                })
+        }
 
         const response = await userModel.userCreate(requestData)
 
@@ -168,3 +210,4 @@ exports.userCreate = async (req, res) => {
     }
 
 }
+

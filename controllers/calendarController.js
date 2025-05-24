@@ -1,7 +1,7 @@
 /* 캘린더 관련 API 응답 반환 파일 */
 
 const calendarModel = require("../model/calendarModel.js")
-const cropsModel =  require("../model/cropsModel.js")
+const tokenModel = require("../model/tokenModel.js")
 
 /**
  * 캘린더 확인
@@ -10,9 +10,10 @@ const cropsModel =  require("../model/cropsModel.js")
 
 exports.calendarCheck = async (req, res) => {
     const userIdx = req.query.userIdx
-    const socialIdx = req.query.socialIdx
+    const localToken = req.query.localToken;
 
-    console.log(`requestData = { idx : ${userIdx},  socialIdx : ${socialIdx} }`)
+
+    console.log(`requestData = { idx : ${userIdx},  localToken : ${localToken}}`)
 
     // 유저 인덱스 누락 체크
     if(!userIdx){
@@ -23,21 +24,31 @@ exports.calendarCheck = async (req, res) => {
         })
     }
 
-    // 소셜 인덱스 누락 체크
-    if(!socialIdx){
+    // 로컬 토큰 누락 체크
+    if(!localToken){
         return res.status(400).json({
             status  : 400,
-            message : "Invalid socialIdx",
+            message : "Invalid localToken",
             data : null,
         })
     }
-
+    
     const requestData = {
         userIdx : userIdx,
-        socialIdx: socialIdx,
+        localToken : localToken
     }
 
     try{
+
+        // 토큰 정보가 일치하지 않을 경우
+        if(!await tokenModel.tokenCheck(requestData)){
+            return res.status(401).json({
+                status  : 401,
+                message : "Unauthorized",
+                data : null,
+                })
+        }
+
         const response = await calendarModel.calendarCheck(requestData);
 
         console.log(` responseData = { ${response} }`)
@@ -66,10 +77,10 @@ exports.calendarCheck = async (req, res) => {
 }
 
 exports.calendarCreate = async (req, res) => {
-    const {userIdx, socialIdx, cropIdx, startAt, location, locationX, locationY } = req.body;
+    const {userIdx, cropIdx, startAt, location, locationX, locationY, localToken } = req.body;
 
     console.log(
-        ` requestData = { userIdx : ${userIdx}, socialIdx : ${socialIdx}, cropIdx : ${cropIdx}, startAt : ${startAt}, location : ${location}, locationX : ${locationX}, locationY : ${locationY} }`
+        ` requestData = { userIdx : ${userIdx}, cropIdx : ${cropIdx}, startAt : ${startAt}, location : ${location}, locationX : ${locationX}, locationY : ${locationY}, localToken : ${localToken} }`
     )
 
      // 유저 인덱스 누락 체크
@@ -77,15 +88,6 @@ exports.calendarCreate = async (req, res) => {
         return res.status(400).json({
             status  : 400,
             message : "Invalid userIdx",
-            data : null,
-        })
-    }
-
-    // 소셜 인덱스 누락 체크
-    if(!socialIdx){
-        return res.status(400).json({
-            status  : 400,
-            message : "Invalid socialIdx",
             data : null,
         })
     }
@@ -135,8 +137,31 @@ exports.calendarCreate = async (req, res) => {
         })
     }
 
+    // 로컬 토큰 누락 체크
+    if(!localToken){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid localToken",
+            data : null,
+        })
+    }
+
+    const tokenRequestData = {
+        userIdx : userIdx,
+        localToken : localToken
+    }
+
    
     try{
+
+        // 토큰 정보가 일치하지 않을 경우
+        if(!await tokenModel.tokenCheck(tokenRequestData)){
+            return res.status(401).json({
+                status  : 401,
+                message : "Unauthorized",
+                data : null,
+                })
+        }
 
         // 년-월-일 형식의 날짜 데이터를 유닉스 타임으로 변환
         unixTime = new Date(startAt)
