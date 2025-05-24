@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 exports.socialCheck = async (socialType, socialIdx, accessToken) => {
     try {
         let url = '';
