@@ -24,21 +24,21 @@ exports.cropsCheck = async (req, res) => {
         
 }
 
-exports.cropCheck = async (req, res) => {
-    const requestData = [req];
+// exports.cropCheck = async (req, res) => {
+//     const requestData = [req];
     
-    const sql = `
-    SELECT name 
-    FROM crops
-    WHERE idx = ?;
-    `
+//     const sql = `
+//     SELECT name 
+//     FROM crops
+//     WHERE idx = ?;
+//     `
 
-    const [result] = await dbConnect.query(sql, requestData);
+//     const [result] = await dbConnect.query(sql, requestData);
 
-        if(!result){
-            return null
-        }
+//         if(!result){
+//             return null
+//         }
     
-        return result;
+//         return result;
         
-}
+// }

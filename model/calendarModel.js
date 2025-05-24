@@ -3,18 +3,18 @@
 const dbConnect = require("../database/index.js");
 
 exports.calendarCheck = async (req) => {
-    const requestData = [req.userIdx, req.socialIdx];
+    const requestData = [req.userIdx, req.localToken];
 
     const sql = `
     SELECT 
-        crops.name, 
-        calendar.workDate, 
-        ct.taskName
+        crops.name AS cropName, 
+        DATE_FORMAT(calendar.workDate, '%Y-%m-%d') AS workDate, 
+        ct.taskName AS taskName
     FROM calendar
     JOIN crops ON calendar.cropIdx = crops.idx
     JOIN croptasks ct ON calendar.workCode = ct.idx
     JOIN users u ON calendar.userIdx = u.idx
-    WHERE u.idx = ? AND u.socialIdx = ?;
+    WHERE u.idx = ? AND u.token = ?;
     `
 
     const [result] = await dbConnect.query(sql, requestData);
