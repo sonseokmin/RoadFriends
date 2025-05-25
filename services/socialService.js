@@ -5,6 +5,8 @@ exports.socialCheck = async (socialType, socialIdx, accessToken) => {
         let url = '';
         let extractId;
 
+        console.log(socialType, socialIdx, accessToken)
+
         // 소셜 타입별 요청 URL과 ID 추출 방식 설정
         switch (socialType) {
             case 'kakao':
@@ -36,7 +38,7 @@ exports.socialCheck = async (socialType, socialIdx, accessToken) => {
         }
 
         const data = await res.json();
-        const userId = extractId(data);
+        const userId = String(extractId(data));
 
 
         console.log(`[${socialType}] 서버 응답 ID: ${userId}, 전달된 소셜Idx: ${socialIdx}`);

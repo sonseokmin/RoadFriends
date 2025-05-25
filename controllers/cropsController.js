@@ -36,7 +36,7 @@ exports.cropsCheck = async (req, res) => {
 
     const tokenRequestData = {
         userIdx : userIdx,
-        userIdx : localToken
+        localToken : localToken
     }
 
     try{
