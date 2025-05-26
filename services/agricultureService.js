@@ -13,7 +13,7 @@ exports.getAgricultuerVideo = async (req, res) => {
 
     // 요청할 파라미터
     const params = {
-        apiKey : process.env.NONGSARO_APi_KEY,
+        apiKey : process.env.NONGSARO_API_KEY,
         sType : "ALL"
     };
 
