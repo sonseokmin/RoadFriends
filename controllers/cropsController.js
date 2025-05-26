@@ -7,6 +7,7 @@ const fs = require('fs');
 
 /**
  * 작물 목록 확인
+ * 작물 이미지ㅣ
  */
 
 
@@ -54,7 +55,7 @@ exports.cropsCheck = async (req, res) => {
 
         const response = await cropsModel.cropsCheck();
 
-        console.log(` responseData = { ${response} }`)
+        console.log(` responseData = { ${JSON.stringify(response)} }`)
 
         return res.status(200).json({
             status  : 200,
@@ -134,6 +135,8 @@ exports.getCropImage = async (req, res) => {
                 data : null,
             })
         }
+
+        console.log(`requestData = ${cropName}`)
 
         res.status(200).sendFile(filePath);
 

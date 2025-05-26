@@ -3,6 +3,10 @@
 const tokenModel = require("../model/tokenModel")
 const socailService = require("../services/socialService")
 
+/**
+ * 
+ * 토큰 생성
+ */
 
 // 토큰 생성
 exports.tokenCreate = async (req, res) => {
@@ -64,7 +68,7 @@ exports.tokenCreate = async (req, res) => {
 
         const response = await tokenModel.tokenCreate(reqestData)
 
-        console.log(response)
+        console.log(`localToken : ${response}`)
 
         return res.status(200).json({
             status  : 200,

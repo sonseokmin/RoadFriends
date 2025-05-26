@@ -1,5 +1,13 @@
+/* 소셜 로그인 관련 서비스 */
+
+/**
+ * 소셜 유저 확인
+ * 로컬 토큰 생성
+ */
+
 const crypto = require('crypto');
 
+//소셜 유저 확인
 exports.socialCheck = async (socialType, socialIdx, accessToken) => {
     try {
         let url = '';
@@ -50,6 +58,7 @@ exports.socialCheck = async (socialType, socialIdx, accessToken) => {
     }
 }
 
+// 로컬 토큰 생성
 exports.encryptWithSHA256 = async (accessToken) => {
     const unixTime = Math.floor(Date.now() / 1000); // 유닉스 시간(초 단위)
     const text = `${accessToken}:${unixTime}`;
