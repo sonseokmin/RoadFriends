@@ -51,8 +51,6 @@ exports.calendarCheck = async (req, res) => {
 
         const response = await calendarModel.calendarCheck(requestData);
 
-        console.log(` responseData = { ${response} }`)
-
           // 생성된 재배력이 없을 경우
           if(response.length === 0){
             return res.status(200).json({
@@ -61,6 +59,8 @@ exports.calendarCheck = async (req, res) => {
                 data : null,
             })
         }
+
+        console.log(` responseData = { ${JSON.stringify(response)} }`)
 
         return res.status(200).json({
             status  : 200,

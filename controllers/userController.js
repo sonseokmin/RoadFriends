@@ -6,7 +6,6 @@ const socialService = require("../services/socialService")
 /** 
  * 유저 확인
  * 회원가입
- * 토큰 생성성
 */
 
 // 유저 확인
@@ -73,7 +72,7 @@ exports.userCheck = async (req, res) => {
 
         const response = await userModel.userCheck(reqestData)
 
-        console.log(` responseData = { ${response} }`)
+        console.log(` responseData = { ${response.idx} }`)
 
         // 없는 유저일 경우
         if(response.length === 0){
@@ -174,7 +173,7 @@ exports.userCreate = async (req, res) => {
 
         const response = await userModel.userCreate(requestData)
 
-        console.log(` responseData = { ${response} }`)
+        console.log(` responseData = { ${response.idx} }`)
 
         if(response.length === 0){
             return res.status(200).json({
