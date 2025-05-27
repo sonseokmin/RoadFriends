@@ -55,7 +55,7 @@ exports.calendarCheck = async (req, res) => {
           if(response.length === 0){
             return res.status(200).json({
                 status  : 200,
-                message : "No exist calendar",
+                message : "Not found calendar",
                 data : null,
             })
         }
@@ -189,6 +189,8 @@ exports.calendarCreate = async (req, res) => {
         let response = await responseAI.json()
 
         console.log(`AI_responseData = { ${response} }`)
+
+        console.log(response.schedules)
         
         const schedules = response.schedules;
 
@@ -243,4 +245,91 @@ exports.calendarCreate = async (req, res) => {
         })
     }
     
+}
+
+exports.calendarDelete = async (req, res) => {
+    const userIdx = req.query.userIdx
+    const localToken = req.query.localToken;
+    const groupId = req.query.groupId;
+
+    console.log(`requestData = { idx : ${userIdx},  localToken : ${localToken}}, groupId : ${groupId}`)
+
+    // 유저 인덱스 누락 체크
+    if(!userIdx){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid userIdx",
+            data : null,
+        })
+    }
+
+    // 로컬 토큰 누락 체크
+    if(!localToken){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid localToken",
+            data : null,
+        })
+    }
+    
+     // 그룹 아이디 누락 체크
+    if(!groupId){
+        return res.status(400).json({
+            status  : 400,
+            message : "Invalid groupId",
+            data : null,
+        })
+    }
+
+    const tokenRequestData = {
+        userIdx : userIdx,
+        localToken : localToken
+    }
+
+    try{
+
+        // 토큰 정보가 일치하지 않을 경우
+        if(!await tokenModel.tokenCheck(tokenRequestData)){
+            return res.status(401).json({
+                status  : 401,
+                message : "Unauthorized",
+                data : null,
+                })
+        }
+
+        const requestData = {
+            groupId : groupId
+        }
+
+        const response = await calendarModel.calendarDelete(requestData);
+
+          // 없는 캘린더일 경우
+          if(!response){
+            return res.status(404).json({
+                status  : 404,
+                message : "Not found calendar",
+                data : null,
+            })
+        }
+
+        console.log(` responseData = { ${JSON.stringify(response)} }`)
+
+        return res.status(200).json({
+            status  : 200,
+            message : "success delete calendar",
+            data : {
+                groupId : response
+            },
+        })
+
+    }
+    catch(err){
+        console.log(err)
+
+         return res.status(500).json({
+            status  : 500,
+            message : "server error",
+        })
+    }
+
 }
