@@ -53,8 +53,8 @@ exports.calendarCheck = async (req, res) => {
 
           // 생성된 재배력이 없을 경우
           if(response.length === 0){
-            return res.status(200).json({
-                status  : 200,
+            return res.status(404).json({
+                status  : 404,
                 message : "Not found calendar",
                 data : null,
             })

@@ -68,6 +68,14 @@ exports.tokenCreate = async (req, res) => {
 
         const response = await tokenModel.tokenCreate(reqestData)
 
+        if(!response){
+            return res.status(404).json({
+                status  : 404,
+                message : "Not found crops",
+                data : null,
+            })
+        }
+
         console.log(`localToken : ${response}`)
 
         return res.status(200).json({

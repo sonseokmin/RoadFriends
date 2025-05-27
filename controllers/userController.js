@@ -76,9 +76,9 @@ exports.userCheck = async (req, res) => {
 
         // 없는 유저일 경우
         if(response.length === 0){
-            return res.status(200).json({
-                status  : 200,
-                message : "No exist user",
+            return res.status(404).json({
+                status  : 404,
+                message : "Not found user",
                 data : null,
             })
         }
@@ -178,7 +178,7 @@ exports.userCreate = async (req, res) => {
         if(response.length === 0){
             return res.status(200).json({
                 status  : 200,
-                message : "Cant made user",
+                message : "fail made user",
                 data : null,
             })
         }
