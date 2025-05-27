@@ -37,6 +37,9 @@ exports.getAgricultuerVideo = async (req, res) => {
             title: item.sj?.[0] || '제목 없음',
             thumbnailUrl: item.thumbImgUrl?.[0] || 'https://via.placeholder.com/150',
             videoUrl: item.mvpUrl?.[0] || '',
+            // provider : item.provdInsttNm?.[0] ||  '제공처 없음',
+            // runtime  : item.runningTime?.[0] ||  '00:00:00',
+            // groupCode  : item.atchmnflGroupEsntlCode?.[0] || '??'
         }));
 
         if(videos.length === 0){
