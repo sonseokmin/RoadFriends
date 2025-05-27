@@ -7,28 +7,66 @@ exports.calendarCheck = async (req) => {
 
     const sql = `
     SELECT 
+        calendar.calendarGroupId,
         crops.name AS cropName, 
-        DATE_FORMAT(calendar.workDate, '%Y-%m-%d') AS workDate, 
-        ct.taskName AS taskName
+        DATE_FORMAT(calendar.workDate, '%Y-%m-%d') AS workDate,
+        ct.taskName
     FROM calendar
     JOIN crops ON calendar.cropIdx = crops.idx
     JOIN cropTasks ct ON calendar.workCode = ct.idx
     JOIN users u ON calendar.userIdx = u.idx
-    WHERE u.idx = ? AND u.token = ?;
+    WHERE u.idx = ? AND u.token = ?
+    ORDER BY calendar.calendarGroupId;
     `
 
     const [result] = await dbConnect.query(sql, requestData);
 
-        if(!result){
+    console.log(result)
+
+
+    const calendarGroup = [];
+
+    // result 배열 추출
+    result.forEach(result => {
+    const existingGroup = calendarGroup.find(g => g.calendarGroupId === result.calendarGroupId);
+
+    const entry = {
+        cropName: result.cropName,
+        workDate: result.workDate,
+        taskName: result.taskName
+    };
+
+    if (existingGroup) {
+        existingGroup.entries.push(entry);
+    } else {
+        calendarGroup.push({
+        calendarGroupId: result.calendarGroupId, // 캘린더 그룹 아이디
+        entries: [entry] // 캘린더 일정
+        });
+    }
+    });
+
+
+        if(!calendarGroup){
             return null
         }
 
-        return result;
+        console.log(calendarGroup)
+
+        return calendarGroup;
 
 }
 
 exports.calenderCreate = async (req) => {
     const requestData = [req.userIdx, req.cropIdx, req.schedule, req.location, req.locationX, req.locationY];
+
+    const SelectGroupIdSql = "SELECT IFNULL(MAX(calendarGroupId), 0) + 1 AS newGroupId FROM calendar;"
+
+    const [groupId] = await dbConnect.query(SelectGroupIdSql);
+
+    console.log(groupId[0].newGroupId)
+
+    const newGroupId = groupId[0].newGroupId
 
     // schedule 배열 추출
     const scheduleArray = requestData[2]; // schedule = [{ workCode, workDate }, {...}, ...]
@@ -37,7 +75,7 @@ exports.calenderCreate = async (req) => {
     const placeholders = [];
 
     for (const sch of scheduleArray) {
-    placeholders.push('(?, ?, ?, ?, ?, ?, ?)');
+    placeholders.push('(?, ?, ?, ?, ?, ?, ?, ?)');
     values.push(
         requestData[0], // userIdx
         requestData[1], // cropIdx
@@ -45,12 +83,13 @@ exports.calenderCreate = async (req) => {
         `${sch.workDate.year}-${sch.workDate.month}-${sch.workDate.day}`,
         requestData[3], // location
         requestData[4], // locationX
-        requestData[5]  // locationY
+        requestData[5],  // locationY
+        newGroupId
     );
     }
 
     const sql = `
-    INSERT INTO calendar (userIdx, cropIdx, workCode, workDate, location, locationX, locationY)
+    INSERT INTO calendar (userIdx, cropIdx, workCode, workDate, location, locationX, locationY, calendarGroupId)
     VALUES ${placeholders.join(',')};
     `;
 
