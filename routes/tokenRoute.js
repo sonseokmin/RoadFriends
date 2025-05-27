@@ -2,10 +2,10 @@
 
 const express = require("express")
 const tokenController = require("../controllers/tokenController.js");
-const limiter = require('../middlewares/limiter');
+// const limiter = require('../middlewares/limiter');
 
 const router = express.Router();
 
-router.post("/token", limiter, tokenController.tokenCreate) // 토큰 생성
+router.post("/token", tokenController.tokenCreate) // 토큰 생성
 
 module.exports = router;
