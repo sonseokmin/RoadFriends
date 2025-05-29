@@ -49,5 +49,22 @@ exports.getAgricultuerVideo = async (req, res) => {
         return videos
 
 
+}
+
+exports.getAgricultuerNews = async (req, res) => {
+    try {
+        const url = 'http://www.agrinet.co.kr/rss/allArticle.xml';
+
+        const response = await fetch(url);
+        const xml = await response.text();
+        
+        const result = await xml2js.parseStringPromise(xml);
+        const items = result.rss.channel[0].item;
+
+        return items
+        
+  } catch (err) {
+    console.error('RSS 불러오기 실패:', err.message);
+  }
 
 }
