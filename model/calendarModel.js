@@ -8,6 +8,7 @@ exports.calendarCheck = async (req) => {
     const sql = `
     SELECT 
         calendar.groupId,
+        calendar.location,
         crops.name AS cropName, 
         DATE_FORMAT(calendar.workStartDate, '%Y-%m-%d') AS workStartDate,
         DATE_FORMAT(calendar.workEndDate, '%Y-%m-%d') AS workEndDate,
@@ -41,6 +42,7 @@ exports.calendarCheck = async (req) => {
     } else {
         calendarGroup.push({
         groupId: result.groupId, // 캘린더 그룹 아이디
+        location : result.location,
         entries: [entry] // 캘린더 일정
         });
     }
