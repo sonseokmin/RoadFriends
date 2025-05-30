@@ -6,6 +6,6 @@ const tokenController = require("../controllers/tokenController.js");
 
 const router = express.Router();
 
-router.post("/token", tokenController.tokenCreate) // 토큰 생성
+router.post("/token", tokenController.postToken) // 토큰 생성
 
 module.exports = router;

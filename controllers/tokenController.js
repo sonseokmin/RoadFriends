@@ -2,6 +2,7 @@
 
 const tokenModel = require("../model/tokenModel")
 const socailService = require("../services/socialService")
+const encryptUtil = require("../utils/encryptUtil")
 
 /**
  * 
@@ -9,7 +10,7 @@ const socailService = require("../services/socialService")
  */
 
 // 토큰 생성
-exports.tokenCreate = async (req, res) => {
+exports.postToken = async (req, res) => {
     const {userIdx, socialType, socialIdx, accessToken} = req.body;
 
     // 유저 고유 인덱스 누락 체크
@@ -51,7 +52,7 @@ exports.tokenCreate = async (req, res) => {
     
     try{
         // 소셜 고유 인덱스와 accessToken을 가지고 소셜에 인증 확인
-        if(!await socailService.socialCheck(socialType, socialIdx, accessToken)){
+        if(!await socailService.getSocial(socialType, socialIdx, accessToken)){
                 return res.status(401).json({
                     status  : 401,
                     message : "Unauthorized",
@@ -59,14 +60,14 @@ exports.tokenCreate = async (req, res) => {
                 })
         }
          // 유저 토큰 생성
-        const userToken = await socailService.encryptWithSHA256(accessToken)
+        const userToken = await encryptUtil.CreateEncryptWithSHA256(accessToken);
 
         const reqestData = {
             userIdx : userIdx,
             localToken : userToken,
         }
 
-        const response = await tokenModel.tokenCreate(reqestData)
+        const response = await tokenModel.postToken(reqestData)
 
         if(!response){
             return res.status(404).json({

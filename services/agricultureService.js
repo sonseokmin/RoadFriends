@@ -9,7 +9,7 @@
 const xml2js = require('xml2js');
 const parser = new xml2js.Parser();
 
-exports.getAgricultuerVideo = async (req, res) => {
+exports.getAgricultuerVideo = async () => {
 
     // 요청할 파라미터
     const params = {
@@ -18,7 +18,7 @@ exports.getAgricultuerVideo = async (req, res) => {
     };
 
         // params 객체를 요청할 수 있는 파라미터 형태로 변환
-        let requestData = new URLSearchParams(params).toString();
+        const requestData = new URLSearchParams(params).toString();
       
         // AI 서버로 요청
         const response = await fetch(`http://api.nongsaro.go.kr/service/shortMvp/shortMvpList?${requestData}`, {
@@ -51,7 +51,7 @@ exports.getAgricultuerVideo = async (req, res) => {
 
 }
 
-exports.getAgricultuerNews = async (req, res) => {
+exports.getAgricultuerNews = async () => {
     try {
         const url = 'http://www.agrinet.co.kr/rss/allArticle.xml';
 

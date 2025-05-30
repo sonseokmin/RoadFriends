@@ -5,8 +5,8 @@ const calendarController = require("../controllers/calendarController.js");
 
 const router = express.Router();
 
-router.get("/calendars", calendarController.calendarCheck) // 캘린더 확인
-router.post("/calendars", calendarController.calendarCreate) // 캘린더 생성
-router.delete("/calendars", calendarController.calendarDelete) // 캘린더 삭제
+router.get("/calendars", calendarController.getCalendar) // 캘린더 확인
+router.post("/calendars", calendarController.postCalendar) // 캘린더 생성
+router.delete("/calendars", calendarController.deleteCalendar) // 캘린더 삭제
 
 module.exports = router;

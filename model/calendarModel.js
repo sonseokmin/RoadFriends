@@ -2,7 +2,7 @@
 
 const dbConnect = require("../database/index.js");
 
-exports.calendarCheck = async (req) => {
+exports.getCalendar = async (req) => {
     const requestData = [req.userIdx, req.localToken];
 
     const sql = `
@@ -60,7 +60,7 @@ exports.calendarCheck = async (req) => {
 
 }
 
-exports.calenderCreate = async (req) => {
+exports.postCalendar = async (req) => {
     const requestData = [req.userIdx, req.cropIdx, req.schedule, req.location, req.locationX, req.locationY];
 
     const SelectGroupIdSql = "SELECT IFNULL(MAX(groupId), 0) + 1 AS newGroupId FROM calendar;"
@@ -104,11 +104,11 @@ exports.calenderCreate = async (req) => {
         return null
     }
 
-    return req.userIdx;
+    return newGroupId;
 
 }
 
-exports.calendarDelete = async (req, res) => {
+exports.deleteCalendar = async (req, res) => {
     const requestData = [req.groupId];
 
 

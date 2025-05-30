@@ -7,7 +7,7 @@ const dbConnect = require("../database/index.js");
  * 작물 확인인
  */
 
-exports.cropsCheck = async (req, res) => {
+exports.getCrops = async (req, res) => {
 
     const sql = `
     SELECT * FROM crops

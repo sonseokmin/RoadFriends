@@ -2,13 +2,14 @@
 
 const calendarModel = require("../model/calendarModel.js")
 const tokenModel = require("../model/tokenModel.js")
+const AIService = require("../services/AIService.js")
 
 /**
  * 캘린더 확인
  * 캘린더 생성
  */
 
-exports.calendarCheck = async (req, res) => {
+exports.getCalendar = async (req, res) => {
     const userIdx = req.query.userIdx
     const localToken = req.query.localToken;
 
@@ -41,7 +42,7 @@ exports.calendarCheck = async (req, res) => {
     try{
 
         // 토큰 정보가 일치하지 않을 경우
-        if(!await tokenModel.tokenCheck(requestData)){
+        if(!await tokenModel.getTokenIsMatch(requestData)){
             return res.status(401).json({
                 status  : 401,
                 message : "Unauthorized",
@@ -49,7 +50,7 @@ exports.calendarCheck = async (req, res) => {
                 })
         }
 
-        const response = await calendarModel.calendarCheck(requestData);
+        const response = await calendarModel.getCalendar(requestData);
 
           // 생성된 재배력이 없을 경우
           if(response.length === 0){
@@ -76,7 +77,7 @@ exports.calendarCheck = async (req, res) => {
 
 }
 
-exports.calendarCreate = async (req, res) => {
+exports.postCalendar = async (req, res) => {
     const {userIdx, cropIdx, startAt, location, locationX, locationY, localToken } = req.body;
 
     console.log(
@@ -155,7 +156,7 @@ exports.calendarCreate = async (req, res) => {
     try{
 
         // 토큰 정보가 일치하지 않을 경우
-        if(!await tokenModel.tokenCheck(tokenRequestData)){
+        if(!await tokenModel.getTokenIsMatch(tokenRequestData)){
             return res.status(401).json({
                 status  : 401,
                 message : "Unauthorized",
@@ -173,25 +174,15 @@ exports.calendarCreate = async (req, res) => {
             location: location, // 자연어 주소
             locationX: locationX, // x좌표
             locationY: locationY, // y좌표
-          };
+        };
 
-        // params 객체를 요청할 수 있는 파라미터 형태로 변환
-        let requestData = new URLSearchParams(params).toString();
-      
-        // AI 서버로 요청
-        const responseAI = await fetch(`http://${process.env.AI_SERVER_URL}:${process.env.AI_PORT}/farm/schedule?${requestData}`, {
-           method: 'GET',
-           credentials: 'include',
-         })
+        const responseAI = await AIService.createCalendar(params)
+    
+        console.log(`AI_responseData = { ${responseAI} }`)
 
+        console.log(responseAI.schedules)
         
-        let response = await responseAI.json()
-
-        console.log(`AI_responseData = { ${response} }`)
-
-        console.log(response.schedules)
-        
-        const schedules = response.schedules;
+        const schedules = responseAI.schedules;
 
 
         // 재배력을 생성하지 못했을 경우
@@ -203,7 +194,7 @@ exports.calendarCreate = async (req, res) => {
             })
          }
 
-        requestData = {
+        const requestData = {
             userIdx : userIdx,
             cropIdx : cropIdx,
             schedule : schedules,
@@ -212,7 +203,7 @@ exports.calendarCreate = async (req, res) => {
             locationY : locationY
          }
 
-        response = await calendarModel.calenderCreate(requestData);
+        const response = await calendarModel.postCalendar(requestData);
 
         console.log(` responseData = { ${response} }`)
 
@@ -230,7 +221,7 @@ exports.calendarCreate = async (req, res) => {
             status  : 201,
             message : "Success made calendar",
             data : {
-                userIdx : response
+                groupId : response
             },
         })
          
@@ -246,7 +237,7 @@ exports.calendarCreate = async (req, res) => {
     
 }
 
-exports.calendarDelete = async (req, res) => {
+exports.deleteCalendar = async (req, res) => {
     const userIdx = req.query.userIdx
     const localToken = req.query.localToken;
     const groupId = req.query.groupId;
@@ -288,7 +279,7 @@ exports.calendarDelete = async (req, res) => {
     try{
 
         // 토큰 정보가 일치하지 않을 경우
-        if(!await tokenModel.tokenCheck(tokenRequestData)){
+        if(!await tokenModel.getTokenIsMatch(tokenRequestData)){
             return res.status(401).json({
                 status  : 401,
                 message : "Unauthorized",
@@ -300,7 +291,7 @@ exports.calendarDelete = async (req, res) => {
             groupId : groupId
         }
 
-        const response = await calendarModel.calendarDelete(requestData);
+        const response = await calendarModel.deleteCalendar(requestData);
 
           // 없는 캘린더일 경우
           if(!response){

@@ -9,7 +9,7 @@ const socialService = require("../services/socialService")
 */
 
 // 유저 확인
-exports.userCheck = async (req, res) => {
+exports.getUser = async (req, res) => {
     const email = req.query.email;
     const socialType = req.query.socialType;
     const socialIdx = req.query.socialIdx;
@@ -62,7 +62,7 @@ exports.userCheck = async (req, res) => {
 
     try{
         // 소셜 고유 인덱스와 accessToken을 가지고 소셜에 인증 확인
-        if(!await socialService.socialCheck(socialType, socialIdx, accessToken)){
+        if(!await socialService.getSocial(socialType, socialIdx, accessToken)){
                 return res.status(401).json({
                     status  : 401,
                     message : "Unauthorized",
@@ -70,7 +70,7 @@ exports.userCheck = async (req, res) => {
                 })
         }
 
-        const response = await userModel.userCheck(reqestData)
+        const response = await userModel.getUser(reqestData)
 
         console.log(` responseData = { ${response.idx} }`)
 
@@ -101,7 +101,7 @@ exports.userCheck = async (req, res) => {
 }
 
 // 회원가입
-exports.userCreate = async (req, res) => {
+exports.postUser = async (req, res) => {
     const {email, name, socialType, socialIdx, accessToken} = req.body;
 
     console.log(`requestData = { email : ${email}, name : ${name}, socialType : ${socialType}, socialIdx : ${socialIdx}, accessToken : ${accessToken}}`)
@@ -163,7 +163,7 @@ exports.userCreate = async (req, res) => {
     try{
 
          // 소셜 고유 인덱스와 accessToken을 가지고 소셜에 인증 확인
-        if(!await socialService.socialCheck(socialType, socialIdx, accessToken)){
+        if(!await socialService.getSocial(socialType, socialIdx, accessToken)){
                 return res.status(401).json({
                     status  : 401,
                     message : "Unauthorized",
@@ -171,7 +171,7 @@ exports.userCreate = async (req, res) => {
                 })
         }
 
-        const response = await userModel.userCreate(requestData)
+        const response = await userModel.postUser(requestData)
 
         console.log(` responseData = { ${response.idx} }`)
 

@@ -12,7 +12,7 @@ const fs = require('fs');
 
 
 // 작물 목록 확인
-exports.cropsCheck = async (req, res) => {
+exports.getCrops = async (req, res) => {
     const userIdx = req.query.userIdx;
     const localToken = req.query.localToken;
 
@@ -45,7 +45,7 @@ exports.cropsCheck = async (req, res) => {
     try{
 
         // 토큰 정보가 일치하지 않을 경우
-        if(!await tokenModel.tokenCheck(tokenRequestData)){
+        if(!await tokenModel.getTokenIsMatch(tokenRequestData)){
             return res.status(401).json({
                 status  : 401,
                 message : "Unauthorized",
@@ -53,7 +53,7 @@ exports.cropsCheck = async (req, res) => {
             })
         }
 
-        const response = await cropsModel.cropsCheck();
+        const response = await cropsModel.getCrops();
 
         console.log(` responseData = { ${JSON.stringify(response)} }`)
 
@@ -113,7 +113,7 @@ exports.getCropImage = async (req, res) => {
         })
     }
 
-    if (!await fs.existsSync(filePath)) {
+    if (!fs.existsSync(filePath)) {
     return res.status(404).json({
         status : 404,
         message: 'Not found Image', 
@@ -130,7 +130,7 @@ exports.getCropImage = async (req, res) => {
     try{
 
         // 토큰 정보가 일치하지 않을 경우
-        if(!await tokenModel.tokenCheck(tokenRequestData)){
+        if(!await tokenModel.getTokenIsMatch(tokenRequestData)){
             return res.status(401).json({
                 status  : 401,
                 message : "Unauthorized",

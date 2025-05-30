@@ -107,7 +107,7 @@ exports.getAgricultuerVideo = async (req, res) => {
         try{
     
             // 토큰 정보가 일치하지 않을 경우
-            if(!await tokenModel.tokenCheck(tokenRequestData)){
+            if(!await tokenModel.getTokenIsMatch(tokenRequestData)){
                 return res.status(401).json({
                     status  : 401,
                     message : "Unauthorized",
@@ -143,7 +143,7 @@ exports.getAgricultuerVideo = async (req, res) => {
 
 }
 
-exports.getArgricultuerNews = async (req, res) => {
+exports.getAgricultuerNews = async (req, res) => {
     const userIdx = req.query.userIdx;
     const localToken = req.query.localToken;
 
@@ -175,7 +175,7 @@ exports.getArgricultuerNews = async (req, res) => {
         try{
     
             // 토큰 정보가 일치하지 않을 경우
-            if(!await tokenModel.tokenCheck(tokenRequestData)){
+            if(!await tokenModel.getTokenIsMatch(tokenRequestData)){
                 return res.status(401).json({
                     status  : 401,
                     message : "Unauthorized",

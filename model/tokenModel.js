@@ -7,7 +7,7 @@ const dbConnect = require("../database/index.js");
  * 토큰 
 */
 
-exports.tokenCreate = async (req) => {
+exports.postToken = async (req) => {
     const requestData = [req.userIdx, req.localToken, req.localToken]
 
     const sql = `
@@ -26,7 +26,7 @@ exports.tokenCreate = async (req) => {
 
 }
 
-exports.tokenCheck = async (req) => {
+exports.getTokenIsMatch = async (req) => {
     const requestData = [req.userIdx, req.localToken]
     
     const sql = `

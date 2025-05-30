@@ -7,7 +7,7 @@ const dbConnect = require("../database/index.js");
  * 회원가입
 */
 
-exports.userCheck = async (req) => {
+exports.getUser = async (req) => {
     const requestData = [req.email, req.socialType, req.socialIdx];
 
     // 같은 인증 종류, 이메일, 소셜 고유 인덱스가가 존재하면 인덱스 리턴
@@ -27,7 +27,7 @@ exports.userCheck = async (req) => {
 
 }
 
-exports.userCreate = async (req) => {
+exports.postUser = async (req) => {
     const requestData = [req.email, req.name, req.socialType, req.socialIdx];
 
     // 이메일, 이름, 인증 종류 기준으로 DB에 저장
