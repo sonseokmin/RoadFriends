@@ -7,6 +7,7 @@
 
 const tokenModel = require("../model/tokenModel")
 const agricultuerService = require("../services/agricultureService")
+const agricultureModel = require("../model/agricultureModel.js")
 
 
 
@@ -114,9 +115,18 @@ exports.getAgricultuerVideo = async (req, res) => {
                     data : null,
                 })
             }
-    
-            const response = await agricultuerService.getAgricultuerVideo()
-    
+            
+
+            // DB에 저장된 영상 정보가 오늘이 아닐 경우우
+            if(!await agricultureModel.getAgricultureVideoCurrentDayIsMatch()){
+                await agricultureModel.deleteAgricultureVideos()
+
+                await agricultureModel.postAgricultureVideos(await agricultuerService.getAgricultuerVideo())
+            }
+ 
+            const response = await agricultureModel.getAgricultureVideos()
+
+            
             if(!response){
                 return res.status(404).json({
                 status  : 404,
