@@ -3,6 +3,7 @@
 /**
  * 병해충 정보 확인
  * 농사로 비디오 정보 확인
+ * 농어민 신문 뉴스 정보 확인
  */
 
 const tokenModel = require("../model/tokenModel")
@@ -12,68 +13,76 @@ const agricultureModel = require("../model/agricultureModel.js")
 
 
 
-// // 병해충 정보 확인
-// exports.getPests = async (req, res) => {
-//     const userIdx = req.query.userIdx;
-//     const localToken = req.query.localToken;
+// 병해충 정보 확인
+exports.getPests = async (req, res) => {
+    const userIdx = req.query.userIdx;
+    const localToken = req.query.localToken;
 
-//     console.log(`requestData = { idx : ${userIdx},  localToken : ${localToken} }`)
+    console.log(`requestData = { idx : ${userIdx},  localToken : ${localToken} }`)
 
-//       // 유저 고유 인덱스 누락 체크
-//         if(!userIdx){
-//             return res.status(400).json({
-//                 status  : 400,
-//                 message : "Invalid userIdx",
-//                 data : null,
-//             })
-//         }
+      // 유저 고유 인덱스 누락 체크
+        if(!userIdx){
+            return res.status(400).json({
+                status  : 400,
+                message : "Invalid userIdx",
+                data : null,
+            })
+        }
     
-//         // 로컬 토큰 누락 체크
-//         if(!localToken){
-//             return res.status(400).json({
-//                 status  : 400,
-//                 message : "Invalid localToken",
-//                 data : null,
-//             })
-//         }
+        // 로컬 토큰 누락 체크
+        if(!localToken){
+            return res.status(400).json({
+                status  : 400,
+                message : "Invalid localToken",
+                data : null,
+            })
+        }
     
-//         const tokenRequestData = {
-//             userIdx : userIdx,
-//             localToken : localToken
-//         }
+        const tokenRequestData = {
+            userIdx : userIdx,
+            localToken : localToken
+        }
     
-//         try{
+        try{
     
-//             // 토큰 정보가 일치하지 않을 경우
-//             if(!await tokenModel.tokenCheck(tokenRequestData)){
-//                 return res.status(401).json({
-//                     status  : 401,
-//                     message : "Unauthorized",
-//                     data : null,
-//                 })
-//             }
+            // 토큰 정보가 일치하지 않을 경우
+            if(!await tokenModel.getTokenIsMatch(tokenRequestData)){
+                return res.status(401).json({
+                    status  : 401,
+                    message : "Unauthorized",
+                    data : null,
+                })
+            }
     
-//             const response = await cropsModel.cropsCheck();
-    
-//             console.log(` responseData = { ${JSON.stringify(response)} }`)
-    
-//             return res.status(200).json({
-//                 status  : 200,
-//                 message : "success return to pests",
-//                 data : response,
-//             })
-    
-//         }
-//         catch(err){
-//             console.log(err)
-    
-//             return res.status(500).json({
-//                 status  : 500,
-//                 message : "server error",
-//             })
-//         }
+            const response = await agricultureModel.getPests()
 
-// }
+            if (!response) {
+                return res.status(404).json({
+                    status : 404,
+                    message: 'Not found Image', 
+                    data : null
+                    });
+            }
+    
+            console.log(` responseData = { ${JSON.stringify(response)} }`)
+    
+            return res.status(200).json({
+                status  : 200,
+                message : "success return to pests",
+                data : response,
+            })
+    
+        }
+        catch(err){
+            console.log(err)
+    
+            return res.status(500).json({
+                status  : 500,
+                message : "server error",
+            })
+        }
+
+}
 
 // 농사로 비디오 정보 확인
 exports.getAgricultuerVideo = async (req, res) => {
@@ -153,6 +162,7 @@ exports.getAgricultuerVideo = async (req, res) => {
 
 }
 
+// 농어민 신문 뉴스 정보 확인
 exports.getAgricultuerNews = async (req, res) => {
     const userIdx = req.query.userIdx;
     const localToken = req.query.localToken;

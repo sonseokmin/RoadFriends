@@ -2,12 +2,12 @@
 
 const cropsModel = require("../model/cropsModel.js")
 const tokenModel = require("../model/tokenModel.js")
-const path = require('path');
 const fs = require('fs');
+const path = require('path')
 
 /**
  * 작물 목록 확인
- * 작물 이미지ㅣ
+ * 작물 이미지 확인
  */
 
 
@@ -77,11 +77,13 @@ exports.getCrops = async (req, res) => {
 
 }
 
+// 작물 이미지 확인
 exports.getCropImage = async (req, res) => {
     const userIdx = req.query.userIdx;
     const localToken = req.query.localToken;
     const cropName = req.query.cropName;
-    const filePath = path.join(__dirname, '../images', `${cropName}.png`);
+    const filePath = path.join(__dirname, '../images/crops', `${cropName}.png`);
+
 
     console.log(`requestData = { idx : ${userIdx},  localToken : ${localToken}, cropName = ${cropName} }`)
 
@@ -140,8 +142,14 @@ exports.getCropImage = async (req, res) => {
 
         console.log(`requestData = ${cropName}`)
 
-        res.status(200).sendFile(filePath);
-
+        return res.status(200).json({
+            status  : 200,
+            message : "success return to cropImage",
+            data : {
+                url : `/images/crops/${cropName}.png`
+            },
+        })
+    
     }    
     catch(err){
         console.log(err)

@@ -2,6 +2,12 @@
 
 const dbConnect = require("../database/index.js");
 
+/**
+ * 캘린더 확인
+ * 캘린더 생성
+ * 캘린더 삭제
+ */
+
 exports.getCalendar = async (req) => {
     const requestData = [req.userIdx, req.localToken];
 

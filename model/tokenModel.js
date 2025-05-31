@@ -4,7 +4,7 @@ const dbConnect = require("../database/index.js");
 
 /** 
  * 토큰 생성
- * 토큰 
+ * 토큰 일치 확인
 */
 
 exports.postToken = async (req) => {

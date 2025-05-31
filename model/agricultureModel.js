@@ -2,6 +2,14 @@
 
 const dbConnect = require("../database/index.js");
 
+/**
+ * 농업 교육 영상 일자 확인
+ * 농업 교육 영상 확인
+ * 농업 영상 생성
+ * 농업 영상 삭제
+ * 병해충 목록 확인 
+ */
+
 exports.getAgricultureVideoCurrentDayIsMatch = async (req, res) => {
     const sql = `
     SELECT 
@@ -84,6 +92,29 @@ exports.deleteAgricultureVideos = async (req, res) => {
     if(!result){
         return null
     }
+
+    return result
+}
+
+exports.getPests = async (req, res) => {
+    const sql = `
+      SELECT *
+      FROM pests;
+    `;
+
+    let [result] = await dbConnect.query(sql);
+
+    if(!result){
+        return null
+    }
+
+    result = result.map(item => ({
+    name: item.name,
+    url: `/images/pests/${item.url}.png`, // 클라이언트에서 접근 가능한 이미지 URL
+    detail: item.detail
+    }));
+
+    console.log(result)
 
     return result
 }

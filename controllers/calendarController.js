@@ -7,6 +7,8 @@ const AIService = require("../services/AIService.js")
 /**
  * 캘린더 확인
  * 캘린더 생성
+ * 캘리더 삭제
+ * 
  */
 
 exports.getCalendar = async (req, res) => {
@@ -237,6 +239,7 @@ exports.postCalendar = async (req, res) => {
     
 }
 
+// 캘린더 삭제제
 exports.deleteCalendar = async (req, res) => {
     const userIdx = req.query.userIdx
     const localToken = req.query.localToken;
