@@ -59,7 +59,7 @@ exports.getPests = async (req, res) => {
             if (!response) {
                 return res.status(404).json({
                     status : 404,
-                    message: 'Not found Image', 
+                    message: 'Not found pests', 
                     data : null
                     });
             }
