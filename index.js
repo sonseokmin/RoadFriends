@@ -1,5 +1,8 @@
 /* 서버 실행 메인 파일 */
 
+// Copyright (c) 2025 Roadfarm
+// MIT License
+
 require('dotenv').config(); 
 const express = require('express');
 const path = require('path');
