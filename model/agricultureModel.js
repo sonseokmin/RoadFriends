@@ -108,6 +108,7 @@ exports.getPests = async (req, res) => {
 
     result = result.map(item => ({
     name: item.name,
+    type : item.type,
     url: `/images/pests/${item.url}.png`, // 클라이언트에서 접근 가능한 이미지 URL
     detail: item.detail
     }));
