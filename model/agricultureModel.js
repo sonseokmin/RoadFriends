@@ -75,8 +75,6 @@ exports.postAgricultureVideos = async (req, res) => {
         return null
     }
 
-    console.log(result)
-
     return result
 
 }

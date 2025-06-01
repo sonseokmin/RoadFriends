@@ -135,6 +135,7 @@ exports.getAgricultuerVideo = async (req, res) => {
  
             const response = await agricultureModel.getAgricultureVideos()
 
+            console.log(response)
             
             if(!response){
                 return res.status(404).json({
